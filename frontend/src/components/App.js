@@ -1,6 +1,6 @@
-import React, { component } from "react";
+import React, { Component } from "react";
 import { render } from "react-dom";
-export default class App extends component{
+export default class App extends Component{
     constructor(props){
         super(props);
 
@@ -9,6 +9,8 @@ export default class App extends component{
         return <h1>testing react by Ravish</h1>;
     }
 }
-
-const appDiv = document.getElementById("app");
-render(<App />, appDiv);
+ReactDOM.createRoot(document.getElementById('app')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
+)
