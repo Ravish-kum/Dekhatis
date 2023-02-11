@@ -1,0 +1,20 @@
+{% for message in messages %} 
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+  <strong>message:</strong> {{ message }}
+  <button type="button" class="close" data-dismiss="alert" aria-label="close">
+  <span aria-hidden="true">&times;</span>
+  </button>
+  </div>
+  {% endfor %}
+
+
+<div class='col-sn'>
+      {% if user.is_authenticated %}
+       <h3>hello {{ name }} </h3>
+       <h3>welcome </h3>
+       <a href="{% url 'authentications:signout' %}"><button type="submit" class="btn btn-primary">signout</button></a>
+      {% else %}
+       <a href="/"><button type="button" class="btn btn-primary">back</button></a>
+       <a href="{% url 'authentications:signup' %}"><button type="button" class="btn btn-primary">signup</button></a>
+       <a href="{% url 'authentications:signin' %}"><button type="button" class="btn btn-primary">signin</button></a>
+      {% endif %}

@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
-    'rest_framework',
-    'frontend.apps.FrontendConfig'
+    'frontend.apps.FrontendConfig',
+    'authentications.apps.AuthenticationsConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -58,7 +59,9 @@ ROOT_URLCONF = 'woodywood.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/frontend')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/authentications')],
+
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,10 +82,15 @@ WSGI_APPLICATION = 'woodywood.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'woodstructure',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
+
 
 
 # Password validation
@@ -129,5 +137,6 @@ STATIC_URL = 'woodywood/frontend/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #added manually
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+MEDIA_URL='woodywood/uploads/images/'
+MEDIA_ROOT= BASE_DIR

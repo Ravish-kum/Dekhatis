@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>know more</title>
+    </head>
+<body>
+
+   <table border="3" height="50%" width="50%" align="center" style="border-spacing: 10px 0;">
+        <tr>
+            <td>
+                <div class="card" style="width: 18rem;">
+                  <img src="{{ product.item_image.url }}" class="card-img-top" >
+                   <div class="card-body">
+                    <center>
+                     <h5 class="card-title"><h1>NAME :  {{ product.item_name }}</h1></h5>
+                     <p class="card-text"><h1>{{ product.item_detail }}</h1></p>
+                     <a href="{% url 'order' %}"><button type="button" class="btn btn-primary">buy</button></a>
+                     <div class="alert alert-danger" role="alert">
+                     {% if statement  == order_range %}
+                       <h4> available </h4>
+                     {% else %}
+                       <h4> not available </h4>
+                     {% endif %}
+                
+                      </div>
+                    </center>
+                   </div>
+                </div>
+            </td>
+            <td>
+                <center>
+                <p class="text"><h3>Id  :  {{ product.item_id }}<h3></p>
+                <p class="text"><h3>item_Id  :  {{ product.c_item_id }}<h3></p>
+                <p class="text"><h3>cost  :  {{ product.item_cost }}<h3></p>
+                <p class="text"><h3>category  :  {{ product.item_categories }}<h3></p>
+                <p class="text"><h3>revenue  :  {{ product.item_revenue }}<h3></p>
+                <p class="text"><h3>pin  :  {{ product.shop_pin }}<h3></p>
+                </center>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
