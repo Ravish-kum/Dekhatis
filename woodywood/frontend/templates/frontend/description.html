@@ -1,43 +1,38 @@
 <html>
-    <head>
-        <title>know more</title>
-    </head>
+
+<head>
+  <title>know more</title>
+</head>
+
 <body>
+  {% include 'frontend/navbar.html' %}
+  <div class="flex flex-col items-center">
+    <div class="bg-[rgb(250,250,250)] p-4 w-3/4 my-10">
+      <div class="flex">
+        <img src="{{ product.item_image.url }}" alt="Product">
+        <div class="mx-2 w-full flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between">
+              <h1 class="uppercase font-bold text-2xl text-[rgb(50,50,50)]">{{product.item_name}}</h1>
+              <h1 class="text-xl text-[rgb(50,50,50)]">₹{{product.item_cost}}</h1>
+            </div>
+            <h1 class="my-3 text-gray-700 font-light">{{product.item_detail}}</h1>
+            <h1 class="my-10">Category: <span
+                class="uppercase mx-1 rounded-sm text-[rgb(100,100,100)]">{{product.item_categories}}</span>
+            </h1>
+          </div>
 
-   <table border="3" height="50%" width="50%" align="center" style="border-spacing: 10px 0;">
-        <tr>
-            <td>
-                <div class="card" style="width: 18rem;">
-                  <img src="{{ product.item_image.url }}" class="card-img-top" >
-                   <div class="card-body">
-                    <center>
-                     <h5 class="card-title"><h1>NAME :  {{ product.item_name }}</h1></h5>
-                     <p class="card-text"><h1>{{ product.item_detail }}</h1></p>
-                     <a href="{% url 'order' %}"><button type="button" class="btn btn-primary">buy</button></a>
-                     <div class="alert alert-danger" role="alert">
-                     {% if statement  == order_range %}
-                       <h4> available </h4>
-                     {% else %}
-                       <h4> not available </h4>
-                     {% endif %}
-                
-                      </div>
-                    </center>
-                   </div>
-                </div>
-            </td>
-            <td>
-                <center>
-                <p class="text"><h3>Id  :  {{ product.item_id }}<h3></p>
-                <p class="text"><h3>item_Id  :  {{ product.c_item_id }}<h3></p>
-                <p class="text"><h3>cost  :  {{ product.item_cost }}<h3></p>
-                <p class="text"><h3>category  :  {{ product.item_categories }}<h3></p>
-                <p class="text"><h3>revenue  :  {{ product.item_revenue }}<h3></p>
-                <p class="text"><h3>pin  :  {{ product.shop_pin }}<h3></p>
-                </center>
-            </td>
-        </tr>
-    </table>
-
+          <!-- Order Button -->
+          {% if statement == order_range%}
+          <a href="{% url 'order' %}"
+            class="bg-green-500 rounded-sm text-white font-bold px-6 py-1 text-center">Order</a>
+          {% else %}
+          <h1 class="text-center font-light">Not Available In Your Region</h1>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>
