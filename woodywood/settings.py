@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'frontend.apps.FrontendConfig',
     'authentications.apps.AuthenticationsConfig',
-
+    'tailwind',
 ]
 
 MIDDLEWARE = [
