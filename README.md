@@ -1,0 +1,1 @@
+**INSTALL "mysqlclient" and "django-tailwind" PLUGIN**

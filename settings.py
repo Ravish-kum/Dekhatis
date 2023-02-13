@@ -42,14 +42,6 @@ INSTALLED_APPS = [
     'frontend.apps.FrontendConfig',
     'authentications.apps.AuthenticationsConfig',
     'tailwind',
-    'theme',
-    'django_browser_reload',
-]
-
-TAILWIND_APP_NAME = 'theme'
-
-INTERNAL_IPS = [
-    "127.0.0.1",
 ]
 
 MIDDLEWARE = [
@@ -60,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'woodywood.urls'
@@ -70,7 +61,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates/frontend')],
         'DIRS': [os.path.join(BASE_DIR, 'templates/authentications')],
-
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -146,7 +136,6 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #added manually
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend', 'static')]
-print(STATICFILES_DIRS)
-MEDIA_URL='/images/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+MEDIA_URL='woodywood/uploads/images/'
 MEDIA_ROOT= BASE_DIR

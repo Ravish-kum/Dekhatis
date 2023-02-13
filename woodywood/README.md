@@ -1,1 +1,0 @@
-Run "python manage.py tailwind start" during development
