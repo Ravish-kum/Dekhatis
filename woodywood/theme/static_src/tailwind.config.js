@@ -4,6 +4,7 @@
  * If you need the full config, get it from here:
  * https://unpkg.com/browse/tailwindcss@latest/stubs/defaultConfig.stub.js
  */
+const colors = require('tailwindcss/colors')
 
 module.exports = {
     content: [
@@ -42,7 +43,15 @@ module.exports = {
         // '../../**/*.py'
     ],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                stone: colors.warmGray,
+                sky: colors.lightBlue,
+                neutral: colors.trueGray,
+                gray: colors.coolGray,
+                slate: colors.blueGray,
+            }
+        },
     },
     plugins: [
         /**

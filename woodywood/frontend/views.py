@@ -17,10 +17,16 @@ def categories(request):
     statement=request.POST.get('pin')
     if categoryid is None:
         items = Product.objects.all()
+        if statement is not None:
+            items = Product.objects.filter(shop_pin=statement)
+
     else :
         items = Product.objects.filter(item_categories=categoryid)
-
-    context = {'items':items,'categ':categ }
+        if statement is not None:
+            items = Product.objects.filter(item_categories=categoryid, shop_pin=statement)
+    
+    context = {'items':items,'categ':categ, 'pin':statement }
+    print(context['pin'])
     return render(request,'frontend/categories.html',context=context)
 
 def description(request, myid):
