@@ -14,7 +14,18 @@
 
 <body>
   {% include 'frontend/navbar.html' %}
-  <h1>Hello</h1>
-  <a href="/categories">categories</a>
+<form method ='POST'>{% csrf_token %}
+   <div class="input-group mb-3">
+    <input type="search" class="form-control" name='search' placeholder="product search" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+      <button class="btn btn-outline-secondary" type="submit">search</button>
+   </div>
+</form>
+<h1 class="text-xl font-light text-[rgb(50,50,50)] mt-3 mb-3">Categories</h1>
+    <div class="bg-gray-100 flex w-3/4 p-4">
+      <a href="/categories/?categories=sofa" class="text-lg mx-2 text-gray-700 font-light" id="sofa"><i
+          class="fa-solid fa-couch mx-1"></i>Sofas</a>
+      <a href="/categories/?categories=bed" class="text-lg mx-2 text-gray-700 font-light" id="bed"><i
+          class="fa-solid fa-bed mx-2"></i>Beds</a>
+    </div>
 </body>
 </html>

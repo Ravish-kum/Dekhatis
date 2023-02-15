@@ -5,41 +5,58 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
+ 
+def home(request, *args, **kwargs):     #def index(request):
 
-def home(request, *args, **kwargs):     #def index(request): 
-    return render(request,'frontend/home.html')
+    print(request.GET)
+    if request.method =='POST':
+        searcher = request.POST.get('search')
+        request.session['searching']= searcher
+        request.session.modified= True
 
-def categories(request):
-    global statement
+        return redirect('categories')
+    else:
+        return render(request,'frontend/home.html')
+
+
+def categories(request): 
     items = Product.objects.all()
-    categ= Product.objects.values("item_categories").distinct()
-    categoryid=request.GET.get('categories')
-    statement=request.POST.get('pin')
-    if categoryid is None:
-        items = Product.objects.all()
-        if statement is not None:
-            items = Product.objects.filter(shop_pin=statement)
+    categoryid = request.GET.get('categories')
+    statement = request.POST.get("pin")
 
-    else :
+
+    #categ= Product.objects.values("item_categories").distinct()
+    if statement is None and request.session['pin_ava'] is not None:
+        statement = request.session['pin_ava']
+
+
+    request.session['pin_ava']= statement
+    request.session.modified= True
+
+    categoryfilter= request.session['searching']
+    if categoryid is not None:
         items = Product.objects.filter(item_categories=categoryid)
-        if statement is not None:
-            items = Product.objects.filter(item_categories=categoryid, shop_pin=statement)
+    else:   
+        if categoryfilter is not None :
+            items = Product.objects.filter(item_name__icontains=categoryfilter)
+
+        else :
+           items = Product.objects.all()
+
+    context = {'items':items}
     
-    context = {'items':items,'categ':categ, 'pin':statement }
-    print(context['pin'])
     return render(request,'frontend/categories.html',context=context)
 
 def description(request, myid):
     #order_range=Product.objects.values('shop_pin').distinct()
-
+    rangechecker = request.session['pin_ava']
     order_range= Product.objects.values('shop_pin').filter(item_id=myid)   
-
     order_range= order_range[0]
     order_range= order_range.values()
     order_range= str(list(order_range)[0])
 
     product = Product.objects.filter(item_id=myid)
-    return render(request, 'frontend/description.html',{'product':product[0], 'order_range':order_range,'statement':statement})
+    return render(request, 'frontend/description.html',{'product':product[0], 'order_range':order_range,'rangechecker':rangechecker})
 
 
 #---------------------------------------order------------------------------------------------------------
