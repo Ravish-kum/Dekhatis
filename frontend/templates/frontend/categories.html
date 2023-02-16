@@ -34,7 +34,10 @@
                 <div class="flex justify-between">
                   <a href="description/{{item.item_id}}"><button id="qv{{item.item_id}}" type="button"
                       class="bg-green-500 text-white px-2">Buy</button></a>
-                  <button type="button" class="px-2">Add to cart</button>
+                  <form action='' method='POST'>{% csrf_token %}
+                    <input type ='text' hidden name ='cartproduct' value="{{item.item_id}}">
+                    <input type="submit" class="px-2" value='add to cart'>
+                  </form>
                 </div>
               </div>
             </div>
