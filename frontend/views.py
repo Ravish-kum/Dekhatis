@@ -1,12 +1,14 @@
 from django.shortcuts import render, HttpResponse, redirect
 from api.models import Product
 from api.models import Customer_table
-from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
  
 def home(request, *args, **kwargs):     #def index(request):
 
+    print(request.GET)
     if request.method =='POST':
         searcher = request.POST.get('search')
         request.session['searching']= searcher
@@ -16,43 +18,22 @@ def home(request, *args, **kwargs):     #def index(request):
     else:
         return render(request,'frontend/home.html')
 
-@login_required
 
 def categories(request): 
     items = Product.objects.all()
-#----------------------------------------------------------------------------
+    categoryid = request.GET.get('categories')
     statement = request.POST.get("pin")
-    request.session['pin_ava']= None
+
+    print(request.session['pin_ava'])
+    #categ= Product.objects.values("item_categories").distinct()
     if statement is None and request.session['pin_ava'] is not None:
         statement = request.session['pin_ava']
 
+
     request.session['pin_ava']= statement
-#------------------------------------------------------------------------------
-    #categ= Product.objects.values("item_categories").distinct()
-    categoryid = request.GET.get('categories')
-#------------------------------------------------------------------------------
-    cartfillings = request.POST.get("cartproduct")
-    cart= request.session['cart'] 
+    request.session.modified= True
 
-    print(cartfillings)
-
-    if  cart:
-        quantity = cart.get(cartfillings)
-        if quantity:
-            cart[cartfillings]= quantity + 1
-        else:
-            cart[cartfillings]=1
-    else:
-        cart={}
-        cart[cartfillings]=1
-
-    request.session['cart']= cart
-
-
-    print('cart',request.session['cart'])
-
-    #--------------------------------------------------------------------------
-    request.session['searching']=None
+    
     categoryfilter= request.session['searching']
     if categoryid is not None:
         items = Product.objects.filter(item_categories=categoryid)
@@ -62,7 +43,8 @@ def categories(request):
 
         else :
            items = Product.objects.all()
-
+    
+    request.session['searching']= None
     context = {'items':items}
     
     return render(request,'frontend/categories.html',context=context)
@@ -102,3 +84,6 @@ def order(request):
                            )
         customer.save()     
         return redirect('test')
+
+def cart(request):
+    return render(request, 'frontend/cart.html')

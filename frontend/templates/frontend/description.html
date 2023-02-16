@@ -23,7 +23,7 @@
           </div>
 
           <!-- Order Button -->
-          {% if rangechecker == order_range%}
+          {% if order_range == rangechecker%}
           <a href="{% url 'order' %}"
             class="bg-green-500 rounded-sm text-white font-bold px-6 py-1 text-center">Order</a>
           {% else %}
