@@ -7,8 +7,10 @@ from django.contrib.auth import authenticate, login, logout
 # Create your views here.
  
 def home(request, *args, **kwargs):     #def index(request):
-
-    print(request.GET)
+    statement = request.POST.get("pin")
+    7
+    request.session['pin_ava']= statement
+    request.session.modified= True
     if request.method =='POST':
         searcher = request.POST.get('search')
         request.session['searching']= searcher
@@ -22,18 +24,9 @@ def home(request, *args, **kwargs):     #def index(request):
 def categories(request): 
     items = Product.objects.all()
     categoryid = request.GET.get('categories')
-    statement = request.POST.get("pin")
-
-    print(request.session['pin_ava'])
-    #categ= Product.objects.values("item_categories").distinct()
-    if statement is None and request.session['pin_ava'] is not None:
-        statement = request.session['pin_ava']
-
-
-    request.session['pin_ava']= statement
-    request.session.modified= True
-
     
+    #categ= Product.objects.values("item_categories").distinct()
+
     categoryfilter= request.session['searching']
     if categoryid is not None:
         items = Product.objects.filter(item_categories=categoryid)
@@ -85,5 +78,23 @@ def order(request):
         customer.save()     
         return redirect('test')
 
-def cart(request):
-    return render(request, 'frontend/cart.html')
+def addcart(request):
+    cartfillings = request.POST.get("cartproduct")
+    cart= request.session.get('cart')
+
+    if  cart:
+        quantity = cart.get(cartfillings)
+        if quantity:
+            cart[cartfillings]= quantity + 1
+        else:
+            cart[cartfillings]=1
+    else:
+        cart={}
+        cart[cartfillings]=1
+
+    request.session['cart'] = cart
+    things = list(request.session.get('cart').keys())
+    cart_items= Product.objects.filter(item_id__in=things)
+    if request.method =='POST':
+        return render(request, 'frontend/cart.html', {'cart_items':cart_items})
+    return redirect('categories')

@@ -20,7 +20,16 @@
        <button class="btn btn-outline-secondary" type="submit">search</button>
     </div>
  </form>
-  <h1>Hello</h1>
+ <div class="flex flex-col items-center">
+  <form method='POST' class="my-10">{% csrf_token %}
+    <div class="flex flex-col">
+      <label for="exampleInputname1" class="text-2xl font-light text-[rgb(50,50,50)]">Filter Available Shops Using
+        Your Pin</label>
+      <input type="pin" name='pin' class="bg-slate-100 p-1" id="exampleInputpin" aria-describedby="nameHelp"
+        placeholder="Enter Pin">
+      <button type="submit" class="bg-green-500 text-white my-1">Filter</button>
+    </div>
+  </form>
   <a href="/categories">categories</a>
 </body>
 </html>

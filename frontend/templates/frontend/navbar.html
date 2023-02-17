@@ -7,7 +7,9 @@
       </div>
       <div class="flex items-center">
         <h3 class="mx-2">{{ user }}</h3>
+        <a href="{% url 'addcart' %}"><button type="button" class="bg-[#FF5900] rounded-sm py-1 text-white px-3">cart</button></a>
         <a href="{% url 'authentications:signout' %}"><button type="submit" class="text-xl" title="Logout"><i class="fa-solid fa-right-to-bracket mx-1"></i></button></a>
+
       </div>
        
       {% else %}

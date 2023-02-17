@@ -21,11 +21,24 @@
                 class="uppercase mx-1 rounded-sm text-[rgb(100,100,100)]">{{product.item_categories}}</span>
             </h1>
           </div>
+          <div class="flex flex-col items-center">
+            <form method='POST' action="{% url 'home' %}" class="my-10">{% csrf_token %}
+              <div class="flex flex-col">
+                <label for="exampleInputname1" class="text-2xl font-light text-[rgb(50,50,50)]">Filter Available Shops Using
+                  Your Pin</label>
+                <input type="pin" name='pin' class="bg-slate-100 p-1" id="exampleInputpin" aria-describedby="nameHelp"
+                  placeholder="Enter Pin">
+                <button type="submit" class="bg-green-500 text-white my-1">Filter</button>
+              </div>
+            </form>
 
           <!-- Order Button -->
           {% if order_range == rangechecker%}
-          <a href="{% url 'order' %}"
-            class="bg-green-500 rounded-sm text-white font-bold px-6 py-1 text-center">Order</a>
+          <form action="/addcart/" method='POST'>{% csrf_token %}
+            <input type ='text' hidden name ='cartproduct' value="{{product.item_id}}">
+            <input type="submit" class="bg-green-500 rounded-sm text-white font-bold px-6 py-1 text-center" value='order'>
+          </form>
+          
           {% else %}
           <h1 class="text-center font-light">Not Available In Your Region</h1>
           {% endif %}

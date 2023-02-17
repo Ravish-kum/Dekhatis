@@ -7,5 +7,6 @@ urlpatterns = [
     path("categories/description/<str:myid>", views.description, name='description'),
     path('order/', views.order, name='order'),
     path("", views.home, name="home"),
-    path("cart/",views.cart, name='cart'),
+    path("addcart/",views.addcart, name='addcart'),
+
 ]
