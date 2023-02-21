@@ -1,89 +1,72 @@
 from django.shortcuts import render, HttpResponse, redirect
 from api.models import Product
-from api.models import Customer_table
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
- 
-def home(request, *args, **kwargs):     #def index(request):
-    statement = request.POST.get("pin")
-    7
+
+# -------------------------------------------------home------------------------------------------------------------------------------
+
+def home(request, *args, **kwargs):  
+
+    statement = request.POST.get("pin")                     #statement variable for pin
     request.session['pin_ava']= statement
     request.session.modified= True
-    if request.method =='POST':
+    if request.method =='POST':                             #searcher variable for searching name
         searcher = request.POST.get('search')
         request.session['searching']= searcher
         request.session.modified= True
-
         return redirect('categories')
     else:
         return render(request,'frontend/home.html')
 
+#------------------------------------------------categories--------------------------------------------------------------------------
 
 def categories(request): 
-    items = Product.objects.all()
-    categoryid = request.GET.get('categories')
-    
-    #categ= Product.objects.values("item_categories").distinct()
-
-    categoryfilter= request.session['searching']
+    request.session['searching'] =None
+    items = Product.objects.all()                                       #items contains all products from item table 
+    categoryid = request.GET.get('categories')                          #categoryid variable get the category clicked on bar
+    categoryfilter= request.session['searching']                        #categoryfilter -- session declaration 
     if categoryid is not None:
         items = Product.objects.filter(item_categories=categoryid)
     else:   
         if categoryfilter is not None :
             items = Product.objects.filter(item_name__icontains=categoryfilter)
-
         else :
            items = Product.objects.all()
     
     request.session['searching']= None
     context = {'items':items}
     
-    return render(request,'frontend/categories.html',context=context)
+    return render(request,'frontend/categories.html',context=context)   #categ= Product.objects.values("item_categories").distinct()
+
+#------------------------------------------------description-------------------------------------------------------------------------
 
 def description(request, myid):
-    #order_range=Product.objects.values('shop_pin').distinct()
-    rangechecker = request.session['pin_ava']
+    
+    if request.method == 'POST':                            # holding pin from description
+        statement = request.POST.get("pin")
+        request.session['pin_ava'] = statement  
+    rangechecker = request.session['pin_ava']                  # rankchecker variable for holding session value
     order_range= Product.objects.values('shop_pin').filter(item_id=myid)   
     order_range= order_range[0]
     order_range= order_range.values()
-    order_range= str(list(order_range)[0])
+    order_range= str(list(order_range)[0])                      #order_range variable for geting pin of product
 
-    product = Product.objects.filter(item_id=myid)
+    product = Product.objects.filter(item_id=myid)              #product filteration on id
     return render(request, 'frontend/description.html',{'product':product[0], 'order_range':order_range,'rangechecker':rangechecker})
 
 
-#---------------------------------------order------------------------------------------------------------
-def order(request): 
-    
-    if request.method == 'GET': 
-        return render(request,'frontend/credentials.html')
-    else: 
-        postdata =request.POST
-        name = postdata.get('name')
-        phone= postdata.get('phone')
-        address = postdata.get('address')
-        pin = postdata.get('pin')
-        email= postdata.get('email')
-        password= postdata.get('password')
-        customer= Customer_table(
-                           customer_name=name,
-                           customer_phone=phone,
-                           customer_address=address,
-                           customer_pin=pin,
-                           customer_email=email,
-                           customer_pass=password
-                           )
-        customer.save()     
-        return redirect('test')
+
+
+#---------------------------------------------------cart-----------------------------------------------------------------------------
 
 def addcart(request):
-    cartfillings = request.POST.get("cartproduct")
-    cart= request.session.get('cart')
+    cartfillings = request.POST.get("cartproduct")      #cart id getting
+    cart= request.session.get('cart')                   #making a dict session
 
-    if  cart:
-        quantity = cart.get(cartfillings)
+    if  cart:                                           
+        quantity = cart.get(cartfillings)                 #if cart exsist getting quantity as value of id as key      
         if quantity:
             cart[cartfillings]= quantity + 1
         else:
@@ -91,10 +74,10 @@ def addcart(request):
     else:
         cart={}
         cart[cartfillings]=1
-
+    number = cart[cartfillings]                     #fetching key or quantity of a item
     request.session['cart'] = cart
-    things = list(request.session.get('cart').keys())
-    cart_items= Product.objects.filter(item_id__in=things)
+    things = list(request.session.get('cart').keys())       #fetching id as keys of dict cart
+    cart_items= Product.objects.filter(item_id__in=things)  #converting id to json object from data base
     if request.method =='POST':
-        return render(request, 'frontend/cart.html', {'cart_items':cart_items})
-    return redirect('categories')
+        return render(request, 'frontend/cart.html', {'cart_items':cart_items, 'number':number })
+    return render(request, 'frontend/cart.html')

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'django_browser_reload',
+    'payment'
 ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -69,7 +70,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates/frontend')],
-        'DIRS': [os.path.join(BASE_DIR, 'templates/authentications')],
+        'DIRS': [os.path.join(BASE_DIR, 'authentications/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'payment/templates')],
 
         'APP_DIRS': True,
         'OPTIONS': {

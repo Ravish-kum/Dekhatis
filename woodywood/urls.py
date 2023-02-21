@@ -22,6 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include('frontend.urls')),
     path("authentications/", include(('authentications.urls','authentications'), namespace='authentications') ),
+    path("payment/", include(('payment.urls','payment'), namespace='payment') ),
+
     path("__reload__/", include("django_browser_reload.urls")), #Takes care of automatic page and css refreshes during development mode
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

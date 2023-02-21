@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
 </head>
+{% load static %}
 <body>
     <h1>CART</h1>
     {% for product in cart_items %}
@@ -17,7 +18,7 @@
               <div>
                 <div class="flex justify-between">
                   <h1 class="uppercase font-bold text-2xl text-[rgb(50,50,50)]">{{product.item_name}}</h1>
-                  <h1 class="text-xl text-[rgb(50,50,50)]">₹{{product.item_cost}}</h1>
+                  <span>$</span><span id="priceDisplay" class="text-xl text-[rgb(50,50,50)]">{{product.item_cost}}</span>
                 </div>
                 <h1 class="my-3 text-gray-700 font-light">{{product.item_detail}}</h1>
                 <h1 class="my-10">Category: <span
@@ -25,12 +26,14 @@
                 </h1>
                 <div>
                     <input type='submit' value='-' class ='col-2 btn btn-block btn-light'>
-                        <div class='text-center col'>3 incart {{ quantity }}</div>
+                        <div id="quantity" class='text-center col'> {{ number }}</div>
                     <input type='submit' value='+' class ='col-2 btn btn-block btn-light'>
 
                 </div>
               </div>
         {% endfor %}
-    
+        <a href="{% url 'payment:credentials' %}"><button type="submit" class="text-xl" title="buy">buy</button></a>
+
+    <script src={% static '/js/cart.js' %}></script>
 </body>
 </html>
