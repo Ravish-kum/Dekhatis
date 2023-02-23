@@ -3,6 +3,7 @@ from api.models import Product
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.views import View
 # Create your views here.
 
 # -------------------------------------------------home------------------------------------------------------------------------------
@@ -23,7 +24,7 @@ def home(request, *args, **kwargs):
 #------------------------------------------------categories--------------------------------------------------------------------------
 
 def categories(request): 
-    request.session['searching'] =None
+
     items = Product.objects.all()                                       #items contains all products from item table 
     categoryid = request.GET.get('categories')                          #categoryid variable get the category clicked on bar
     categoryfilter= request.session['searching']                        #categoryfilter -- session declaration 
@@ -34,8 +35,8 @@ def categories(request):
             items = Product.objects.filter(item_name__icontains=categoryfilter)
         else :
            items = Product.objects.all()
-    
-    request.session['searching']= None
+           request.session['searching']= None
+
     context = {'items':items}
     
     return render(request,'frontend/categories.html',context=context)   #categ= Product.objects.values("item_categories").distinct()
@@ -59,25 +60,40 @@ def description(request, myid):
 
 
 
-#---------------------------------------------------cart-----------------------------------------------------------------------------
+#---------------------------------------------------cart-logic------------------------------------------------------------------------
+class Addcart(View):
+    def post(self,request):
+        cartfillings = request.POST.get("cartproduct")      #cart id getting
+        cart= request.session.get('cart')                   #making a dict session
 
-def addcart(request):
-    cartfillings = request.POST.get("cartproduct")      #cart id getting
-    cart= request.session.get('cart')                   #making a dict session
-
-    if  cart:                                           
-        quantity = cart.get(cartfillings)                 #if cart exsist getting quantity as value of id as key      
-        if quantity:
-            cart[cartfillings]= quantity + 1
+        if  cart:                                           
+            quantity = cart.get(cartfillings)                #if cart exsist getting quantity as value of id as key      
+            if quantity:
+                cart[cartfillings]= quantity + 1 
+            else:
+                cart[cartfillings]=1
         else:
+            cart={}
             cart[cartfillings]=1
-    else:
-        cart={}
-        cart[cartfillings]=1
-    number = cart[cartfillings]                     #fetching key or quantity of a item
-    request.session['cart'] = cart
-    things = list(request.session.get('cart').keys())       #fetching id as keys of dict cart
-    cart_items= Product.objects.filter(item_id__in=things)  #converting id to json object from data base
-    if request.method =='POST':
-        return render(request, 'frontend/cart.html', {'cart_items':cart_items, 'number':number })
-    return render(request, 'frontend/cart.html')
+        number = cart[cartfillings]                     #fetching key or quantity of a item
+        request.session['cart'] = cart
+        print(request.session['cart'])
+       # request.session['number'] = number
+        #request.session.modified= True
+        return redirect('orignalcart')
+    def get(self,request):
+        things = list(request.session.get('cart').keys())       #fetching id as keys of dict cart
+        cart_items= Product.objects.filter(item_id__in=things)  #converting id to json object from data base
+        return render(request, 'frontend/cart.html', {'cart_items':cart_items,'number':1})
+
+#------------------------------------------------cart------------------------------------------------------------------------
+
+class Orignalcart(View):
+    def get(self, request):
+        #quantity = request.session.get('number')
+        things = list(request.session.get('cart').keys())       #fetching id as keys of dict cart
+        cart_items= Product.objects.filter(item_id__in=things)  #converting id to json object from data base
+        return render(request, 'frontend/cart.html', {'cart_items':cart_items,'number':1})
+    
+
+

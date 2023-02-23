@@ -22,7 +22,7 @@
             </h1>
           </div>
           <div class="flex flex-col items-center">
-            <form method='POST' action="" class="my-10">{% csrf_token %}
+            <form method='POST' action="" onsubmit="prevent()" class="my-10">{% csrf_token %}
               <div class="flex flex-col">
                 <label for="exampleInputname1" class="text-2xl font-light text-[rgb(50,50,50)]">Filter Available Shops Using
                   Your Pin</label>
@@ -34,9 +34,9 @@
 
           <!-- Order Button -->
           {% if order_range == rangechecker%}
-          <form action="/addcart/" method='POST'>{% csrf_token %}
+          <form action="/addcart/" method='POST' onsubmit="prevent()">{% csrf_token %}
             <input type ='text' hidden name ='cartproduct' value="{{product.item_id}}">
-            <input type="submit" class="bg-green-500 rounded-sm text-white font-bold px-6 py-1 text-center" value='order'>
+            <input id="order" type="submit" class="bg-green-500 rounded-sm text-white font-bold px-6 py-1 text-center" value='order'>
           </form>
           
           {% else %}
@@ -46,6 +46,15 @@
       </div>
     </div>
   </div>
+  <script>
+    function prevent(e){
+      e.preventDefault()
+      $("button").click(function(){
+        $.ajax({url: "http://127.0.0.1:8000/addcart/"});
+      }
+      
+    }
+  </script>
 </body>
 
 </html>
