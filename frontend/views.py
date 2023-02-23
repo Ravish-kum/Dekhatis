@@ -13,10 +13,14 @@ def home(request, *args, **kwargs):
     statement = request.POST.get("pin")                     #statement variable for pin
     request.session['pin_ava']= statement
     request.session.modified= True
+    request.session['searching']=None
     if request.method =='POST':                             #searcher variable for searching name
         searcher = request.POST.get('search')
-        request.session['searching']= searcher
-        request.session.modified= True
+        if searcher is not None :
+            request.session['searching']= searcher
+            request.session.modified= True
+        else:
+            request.session['searching']= None
         return redirect('categories')
     else:
         return render(request,'frontend/home.html')
@@ -24,7 +28,7 @@ def home(request, *args, **kwargs):
 #------------------------------------------------categories--------------------------------------------------------------------------
 
 def categories(request): 
-
+    print(request.session['searching'])
     items = Product.objects.all()                                       #items contains all products from item table 
     categoryid = request.GET.get('categories')                          #categoryid variable get the category clicked on bar
     categoryfilter= request.session['searching']                        #categoryfilter -- session declaration 
@@ -34,8 +38,8 @@ def categories(request):
         if categoryfilter is not None :
             items = Product.objects.filter(item_name__icontains=categoryfilter)
         else :
-           items = Product.objects.all()
            request.session['searching']= None
+           items = Product.objects.all()
 
     context = {'items':items}
     
