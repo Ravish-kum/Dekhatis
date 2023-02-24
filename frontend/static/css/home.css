@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;500&display=swap');
+
+#carouselExampleIndicators{
+    z-index: -1;
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+}
+
+.input input{
+    background-color: #EBEBEB;
+    padding-left: 0.5rem;
+    margin-bottom: 1rem;
+    height: 2rem;
+}
+
+.input button{
+    background-color: #4FB660;
+    color: white;
+    width: 2rem;
+    height: 2rem;
+}
+
+.input label{
+    font-weight: bold;
+}
+
+.pinCheck{
+    font-family: 'Raleway';
+    margin-top: 1rem !important;
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.categories{
+    margin-top: 1rem;
+    width: 100%;
+    color: #272727;
+    background-color: #EBEBEB;
+    padding: 1rem 1rem;
+    font-weight: 300;
+    font-family: "Raleway";
+    display: flex;
+    gap: 1rem;
+    overflow: scroll;
+}
