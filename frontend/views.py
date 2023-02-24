@@ -28,7 +28,7 @@ def home(request, *args, **kwargs):
 #------------------------------------------------categories--------------------------------------------------------------------------
 
 def categories(request): 
-    print(request.session['searching'])
+
     items = Product.objects.all()                                       #items contains all products from item table 
     categoryid = request.GET.get('categories')                          #categoryid variable get the category clicked on bar
     categoryfilter= request.session['searching']                        #categoryfilter -- session declaration 
@@ -65,7 +65,9 @@ def description(request, myid):
 
 
 #---------------------------------------------------cart-logic------------------------------------------------------------------------
+
 class Addcart(View):
+
     def post(self,request):
         cartfillings = request.POST.get("cartproduct")      #cart id getting
         cart= request.session.get('cart')                   #making a dict session
@@ -85,9 +87,13 @@ class Addcart(View):
        # request.session['number'] = number
         #request.session.modified= True
         return redirect('orignalcart')
+
     def get(self,request):
-        things = list(request.session.get('cart').keys())       #fetching id as keys of dict cart
-        cart_items= Product.objects.filter(item_id__in=things)  #converting id to json object from data base
+        if request.session.get('cart') is not None:    
+            things = list(request.session.get('cart').keys())       #fetching id as keys of dict cart
+            cart_items= Product.objects.filter(item_id__in=things)  #converting id to json object from data base
+        else:
+            cart_items = 'nothing present'
         return render(request, 'frontend/cart.html', {'cart_items':cart_items,'number':1})
 
 #------------------------------------------------cart------------------------------------------------------------------------

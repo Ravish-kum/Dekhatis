@@ -4,7 +4,8 @@ from . import views
 
 urlpatterns = [
     path("credentials/",views.credentials, name='credentials'),
-    path("query/",views.query, name='query')
+    path("query/",views.query, name='query'),
+    path("handlerequest/",views.handlerequest, name='handlerequest')
 
 
 ]
