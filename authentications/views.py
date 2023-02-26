@@ -38,7 +38,6 @@ def signin(request):
             return redirect('/')
         else:
             messages.error(request, "bad credentials")
-            return redirect('home')
 
     return render(request,'signin.html')
 
@@ -47,3 +46,15 @@ def signout(request):
     logout(request)
     messages.success(request, "logged out successfully")
     return redirect("home")
+
+def changepassword(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        new_password = request.POST.get('new_password')
+        u = User.objects.get(username__exact=name)
+        u.set_password(new_password)
+        u.save()
+        messages.success(request, 'your password has been changed')
+        return redirect('authentications:signin')
+
+    return render(request, 'changepassword.html')
