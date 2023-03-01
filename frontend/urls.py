@@ -11,5 +11,6 @@ urlpatterns = [
     path("orignalcart/",Orignalcart.as_view(), name='orignalcart'),
     path("", views.home, name="home"),
     path("addcart/",Addcart.as_view(), name='addcart'),
+    path("description/<str:myid>", views.description, name='description2'),
 
 ]
