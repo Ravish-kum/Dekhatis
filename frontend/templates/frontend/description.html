@@ -3,7 +3,6 @@
 <head>
   <title>know more</title>
 </head>
-
 <body>
   {% include 'frontend/navbar.html' %}
   <div class="flex flex-col items-center">
@@ -46,12 +45,42 @@
       </div>
     </div>
   </div>
+
+  <h1>RELATED IMAGES</h1>
+
+  {% if imageUrl %}
+             <div class="flex">
+              {% for j in imageUrl %}
+                  <img src="/images/{{j}}">
+              {% endfor %}
+             </div>
+  {% endif %}
+
+  <h1>VARIENT AVILABLE </h1>
+
+  {% for item in varient %}
+  <a href="/description/{{item.item_id}}">
+    <div class="card shadow-sm">
+      <img src="{{ item.item_image.url }}" class="d-block w-100" alt="...">
+    <div class="card-body">
+  </a>
+  {% endfor %}
+
+  <h1><center>VISUAL SIMILAR</center> </h1>
+
+  {% for similar in visualsimilar %}
+      <a href="/description/{{similar.item_id}}">
+        <div class="card shadow-sm">
+          <img src="{{ similar.item_image.url }}" class="d-block w-100" alt="...">
+        <div class="card-body">
+      </a>
+  {% endfor %}
   <script>
     function prevent(e){
       e.preventDefault()
       $("button").click(function(){
         $.ajax({url: "http://127.0.0.1:8000/addcart/"});
-      }
+      })
       
     }
   </script>

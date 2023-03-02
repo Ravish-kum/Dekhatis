@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from api.models import Product
+from api.models import Images_table
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -28,7 +29,7 @@ def home(request, *args, **kwargs):
 #------------------------------------------------categories--------------------------------------------------------------------------
 
 def categories(request): 
-    print(request.session['searching'])
+
     items = Product.objects.all()                                       #items contains all products from item table 
     categoryid = request.GET.get('categories')                          #categoryid variable get the category clicked on bar
     categoryfilter= request.session['searching']                        #categoryfilter -- session declaration 
@@ -48,7 +49,8 @@ def categories(request):
 #------------------------------------------------description-------------------------------------------------------------------------
 
 def description(request, myid):
-    
+    product = Product.objects.filter(item_id=myid)
+    #------------------------------------------------------------------------
     if request.method == 'POST':                            # holding pin from description
         statement = request.POST.get("pin")
         request.session['pin_ava'] = statement  
@@ -56,16 +58,44 @@ def description(request, myid):
     order_range= Product.objects.values('shop_pin').filter(item_id=myid)   
     order_range= order_range[0]
     order_range= order_range.values()
-    order_range= str(list(order_range)[0])                      #order_range variable for geting pin of product
+    order_range= str(list(order_range)[0])                 #order_range variable for geting pin of product
+    #------------------------------------------------------------------------
+    m_item_id_ofProduct = Product.objects.values('m_item_id').filter(item_id=myid)   #getting varient id 
+    varient = None
 
-    product = Product.objects.filter(item_id=myid)              #product filteration on id
-    return render(request, 'frontend/description.html',{'product':product[0], 'order_range':order_range,'rangechecker':rangechecker})
+    try:
+        varient_of = m_item_id_ofProduct[0]['m_item_id'].split("#")[2]
+        varient = Product.objects.filter(m_item_id__icontains=varient_of).exclude(item_id=myid)
+    except:
+        pass
+    #------------------------------------------------------------------------------
+    visualsimilar = Product.objects.filter(item_visual_similarity='visual-'+myid).exclude(item_id=myid)
 
+    #-------------------------------------------------------------------------------
+    subject_images=Images_table.objects.filter(item_id=myid)                           #getting more images
+    if len(subject_images) !=0 :
+        imagesUrl = []
+        for i in subject_images:
+            for attr, value in i.__dict__.items():
+                if value != "":
+                    imagesUrl.append(value)
+        del imagesUrl[0:3]
+        if varient is not None :
+            return render(request, 'frontend/description.html', {'product':product[0], 'order_range':order_range,'rangechecker':rangechecker,'imageUrl':imagesUrl,'varient':varient,'visualsimilar':visualsimilar})
+        else:
+            return render(request, 'frontend/description.html', {'product':product[0], 'order_range':order_range,'rangechecker':rangechecker,'imageUrl':imagesUrl,'visualsimilar':visualsimilar})
+
+
+    #------------------------------------------------------------------------
+    
+    return render(request, 'frontend/description.html',{'product':product[0]})
 
 
 
 #---------------------------------------------------cart-logic------------------------------------------------------------------------
+
 class Addcart(View):
+
     def post(self,request):
         cartfillings = request.POST.get("cartproduct")      #cart id getting
         cart= request.session.get('cart')                   #making a dict session
@@ -85,9 +115,13 @@ class Addcart(View):
        # request.session['number'] = number
         #request.session.modified= True
         return redirect('orignalcart')
+
     def get(self,request):
-        things = list(request.session.get('cart').keys())       #fetching id as keys of dict cart
-        cart_items= Product.objects.filter(item_id__in=things)  #converting id to json object from data base
+        if request.session.get('cart') is not None:    
+            things = list(request.session.get('cart').keys())       #fetching id as keys of dict cart
+            cart_items= Product.objects.filter(item_id__in=things)  #converting id to json object from data base
+        else:
+            cart_items = 'nothing present'
         return render(request, 'frontend/cart.html', {'cart_items':cart_items,'number':1})
 
 #------------------------------------------------cart------------------------------------------------------------------------
