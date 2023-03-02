@@ -54,6 +54,8 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+NPM_BIN_PATH= r"C:\Program Files\nodejs\npm.cmd"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -70,7 +72,7 @@ ROOT_URLCONF = 'woodywood.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates/frontend')],
+        'DIRS': [os.path.join(BASE_DIR, 'theme/templates/frontend')],
         'DIRS': [os.path.join(BASE_DIR, 'authentications/templates')],
         'DIRS': [os.path.join(BASE_DIR, 'payment/templates')],
 
