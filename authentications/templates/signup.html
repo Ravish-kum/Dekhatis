@@ -1,14 +1,16 @@
 <html>
     {% load static %}
     <link rel="icon" href="{% static '/images/Logo.png' %}" type="image/x-icon">
-<head><title>Dekthis - Signup</title>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dekthis - Signup</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
     rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
     {% include 'frontend/navbar.html' %}
     <div class='flex flex-col items-center my-20'>
-            <div class ='bg-[rgb(250,250,250)] flex flex-col py-3 px-10 w-2/4' >
+            <div class ='sm:bg-green-500 bg-[rgb(250,250,250)] flex flex-col py-3 px-10 sm:w-2/4 w-11/12' >
             <form action="{% url 'authentications:signup' %}" method='POST'>{% csrf_token %}
             
                 <h3 class="text-3xl font-bold mt-2 mb-5 text-[rgb(50,50,50)]">Create an Account</h3>
